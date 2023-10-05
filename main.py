@@ -5,7 +5,8 @@ from typing import List, Dict, Tuple
 def read_csv(file_path: str) -> List[Dict[str, str]]:
     """
     Читает csv-файл и возвращает список словарей с данными о сотрудниках.
-    Каждый словарь содержит поля "ФИО полностью", "Департамент", "Отдел", "Должность", "Оценка", "Оклад".
+    Каждый словарь содержит поля "ФИО полностью", "Департамент", "Отдел",
+    "Должность", "Оценка", "Оклад".
     :param file_path: путь к csv-файлу
     :return: список словарей с данными о сотрудниках
     """
@@ -19,7 +20,9 @@ def read_csv(file_path: str) -> List[Dict[str, str]]:
         return data
 
 
-def get_department_hierarchy(data: List[Dict[str, str]]) -> Dict[str, List[str]]:
+def get_department_hierarchy(
+        data: List[Dict[str, str]]
+) -> Dict[str, List[str]]:
     """
     Возвращает словарь, в котором ключами являются названия отделов,
     а значениями - списки команд, принадлежащих этим департаментам.
@@ -48,11 +51,13 @@ def print_department_hierarchy(hierarchy: Dict[str, List[str]]):
             print(f'-- {team}')
 
 
-def get_department_report(data: List[Dict[str, str]]) -> List[Tuple[str, int, Tuple[int, int], float]]:
+def get_department_report(
+        data: List[Dict[str, str]]
+) -> List[Tuple[str, int, Tuple[int, int], float]]:
     """
     Возвращает список кортежей с данными о департаментах.
-    Каждый кортеж содержит название департамента, численность, вилку зарплат (минимальная и максимальная),
-    среднюю зарплату.
+    Каждый кортеж содержит название департамента, численность,
+    вилку зарплат (минимальная и максимальная), среднюю зарплату.
     :param data: список словарей с данными о сотрудниках
     :return: список кортежей с данными о департаментах
     """
@@ -69,21 +74,27 @@ def get_department_report(data: List[Dict[str, str]]) -> List[Tuple[str, int, Tu
         else:
             departments[department]['count'] += 1
             salary = int(employee['Оклад'])
-            departments[department]['min_salary'] = min(departments[department]['min_salary'], salary)
-            departments[department]['max_salary'] = max(departments[department]['max_salary'], salary)
+            departments[department]['min_salary'] = min(
+                departments[department]['min_salary'],
+                salary)
+            departments[department]['max_salary'] = max(
+                departments[department]['max_salary'],
+                salary)
             departments[department]['total_salary'] += salary
     report = []
     for department, stats in departments.items():
         count = stats['count']
         min_salary = stats['min_salary']
         max_salary = stats['max_salary']
-        avg_salary = stats['total_salary'] \
-                     / count
-        report.append((department, count, (min_salary, max_salary), avg_salary))
+        avg_salary = stats['total_salary'] / count
+        report.append((department, count, (min_salary, max_salary),
+                       avg_salary))
     return report
 
 
-def print_department_report(report: List[Tuple[str, int, Tuple[int, int], float]]):
+def print_department_report(
+        report: List[Tuple[str, int, Tuple[int, int], float]]
+):
     """
     Выводит на экран сводный отчёт по департаментам.
     :param report: список кортежей с данными о департаментах
@@ -95,7 +106,9 @@ def print_department_report(report: List[Tuple[str, int, Tuple[int, int], float]
         print(f'-- Средняя зарплата: {avg_salary}')
 
 
-def save_department_report(report: List[Tuple[str, int, Tuple[int, int], float]], file_path: str):
+def save_department_report(
+        report: List[Tuple[str, int, Tuple[int, int], float]],
+        file_path: str):
     """
     Сохраняет сводный отчёт по департаментам в csv-файл.
     :param report: список кортежей с данными о департаментах
@@ -103,10 +116,11 @@ def save_department_report(report: List[Tuple[str, int, Tuple[int, int], float]]
     """
     with open(file_path, 'w', newline='', encoding='utf-8') as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(['Департамент', 'Численность', 'Минимальная зарплата', 'Максимальная зарплата',
-                         'Средняя зарплата'])
+        writer.writerow(['Департамент', 'Численность', 'Минимальная зарплата',
+                         'Максимальная зарплата', 'Средняя зарплата'])
         for department, count, (min_salary, max_salary), avg_salary in report:
-            writer.writerow([department, count, min_salary, max_salary, avg_salary])
+            writer.writerow([department, count, min_salary, max_salary,
+                             avg_salary])
 
 
 if __name__ == '__main__':
